@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import webserverproject.serverproject.requestDTO.userDTO.UserJoinRequestDTO;
 import webserverproject.serverproject.responseDTO.userDTO.UserInfoResponseDTO;
 import webserverproject.serverproject.responseDTO.userDTO.UserJoinResponseDTO;
+import webserverproject.serverproject.responseDTO.userDTO.UserRoleResponseDTO;
 import webserverproject.serverproject.service.user.UserServiceImpl;
 
 import javax.validation.Valid;
@@ -35,6 +36,19 @@ public class UserController {
     public ResponseEntity<?> userInfo(Authentication authentication){
         UserInfoResponseDTO userInfoResponseDTO = userService.infoUser(authentication);
         return ResponseEntity.ok().body(createResponse(userInfoResponseDTO,"회원 조회가 성공하였습니다."));
+    }
+
+    @GetMapping("/api/admin")
+    public ResponseEntity<?> admin(){
+        userService.createAdmin();
+        return ResponseEntity.ok().body("admin생성 완료");
+    }
+
+    // 유저 권한 추출
+    @GetMapping("/api/user/role")
+    public ResponseEntity<?> userRole(Authentication authentication){
+        UserRoleResponseDTO userRoleResponseDTO = userService.roleUser(authentication);
+        return  ResponseEntity.ok().body(createResponse(userRoleResponseDTO,"유저 룰 조회"));
     }
 
 

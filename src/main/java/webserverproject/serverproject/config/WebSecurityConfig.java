@@ -1,10 +1,12 @@
 package webserverproject.serverproject.config;
 
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsUtils;
 
@@ -12,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import webserverproject.serverproject.repository.UserRepository;
 import webserverproject.serverproject.security.JwtAuthenticationFilter;
 import webserverproject.serverproject.security.JwtAuthorizationFilter;
+import webserverproject.serverproject.security.Role;
 import webserverproject.serverproject.security.TokenProvider;
 
 @Configuration
@@ -22,10 +25,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	private final UserRepository userRepository;
 	private final TokenProvider tokenProvider;
 
-	public WebSecurityConfig(UserRepository userRepository, TokenProvider tokenProvider) {
+	private  final PasswordEncoder passwordEncoder;
+
+	public WebSecurityConfig(UserRepository userRepository, TokenProvider tokenProvider, PasswordEncoder passwordEncoder) {
 		this.userRepository = userRepository;
 		this.tokenProvider = tokenProvider;
+		this.passwordEncoder = passwordEncoder;
 	}
+
 
 	@Override
 	    protected void configure(HttpSecurity http) throws Exception {
@@ -40,7 +47,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers("/api/join").permitAll() //회원 가입
 				.antMatchers("/api/login").permitAll() // 로그인
 				.antMatchers("/api/moves").permitAll()
-				.anyRequest().permitAll();
+				.antMatchers("/api/admin").permitAll()
+				.antMatchers("/").permitAll()
+				.antMatchers("/login").permitAll()
+				.antMatchers("/join").permitAll()
+				.antMatchers("/movie").permitAll()
+				.antMatchers("/admin").permitAll()
+				.antMatchers("/api/user/role").permitAll()
+				.anyRequest().authenticated();
 		http.cors();
 		http.addFilterBefore(new JwtAuthorizationFilter(tokenProvider, userRepository), UsernamePasswordAuthenticationFilter.class);
 		http.addFilterBefore(new JwtAuthenticationFilter(authenticationManager(), tokenProvider), UsernamePasswordAuthenticationFilter.class);

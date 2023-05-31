@@ -12,6 +12,7 @@ import webserverproject.serverproject.repository.UserRepository;
 import webserverproject.serverproject.requestDTO.userDTO.UserJoinRequestDTO;
 import webserverproject.serverproject.responseDTO.userDTO.UserInfoResponseDTO;
 import webserverproject.serverproject.responseDTO.userDTO.UserJoinResponseDTO;
+import webserverproject.serverproject.responseDTO.userDTO.UserRoleResponseDTO;
 import webserverproject.serverproject.security.Role;
 
 @Service
@@ -37,9 +38,26 @@ public class UserService implements UserServiceImpl {
     }
 
     @Override
+    public void createAdmin() {
+        User user = new User("admin",passwordEncoder.encode("admin"),"admin","01000000000",Role.ROLE_ADMIN,"admin");
+
+        if(!userRepository.existsByEmail(user.getEmail())){
+            userRepository.save(user);
+        }
+
+    }
+
+    @Override
     public UserInfoResponseDTO infoUser(Authentication authentication) {
         // user 찾고
         User user = ((PrincipalDetails) authentication.getPrincipal()).getUser();
         return UserInfoResponseDTO.toUserInfoResponseDTO(user);
+    }
+
+    @Override
+    public UserRoleResponseDTO roleUser(Authentication authentication) {
+        User user = ((PrincipalDetails) authentication.getPrincipal()).getUser();
+
+        return UserRoleResponseDTO.toUserRoleResponseDTO(user);
     }
 }

@@ -25,4 +25,9 @@ public class ViewController {
     public String mainLogin(){
         return "/after";
     }
+
+    @GetMapping("/admin")
+    public String adminLogin(){
+        return "/admin";
+    }
 }

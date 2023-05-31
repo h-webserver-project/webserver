@@ -51,6 +51,14 @@
             border-radius: 3px;
         }
     </style>
+    <script>
+        fetch("http://localhost:8080/api/admin", {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+    </script>
 </head>
 <body>
 <div id="header">
