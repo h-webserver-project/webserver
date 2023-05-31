@@ -3,7 +3,6 @@ package webserverproject.serverproject.error;
 import lombok.Builder;
 import lombok.Getter;
 
-@Getter
 public class ErrorResponse {
     private  int status;
     private  String message;
@@ -15,4 +14,22 @@ public class ErrorResponse {
         this.message = errorCode.getMessage();
         this.errorCode = errorCode.getErrorCode();
     }
+
+	public int getStatus() {
+		return status;
+	}
+
+
+
+	public String getMessage() {
+		return message;
+	}
+
+
+	public String getErrorCode() {
+		return errorCode;
+	}
+
+	
+    
 }

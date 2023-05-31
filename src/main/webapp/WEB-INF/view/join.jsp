@@ -9,7 +9,110 @@
 <html>
 <head>
     <title>회원 가입</title>
+    <style>
+
+        body {
+            overflow: hidden;
+
+            margin: 0;
+
+        }
+        #MovieHeader{
+            text-align: center;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 50px;
+            color: #fff;
+            opacity: 0;
+            transition: opacity 2s;
+        }
+
+        #MovieHeader.visible {
+            opacity: 1;
+        }
+        #header{
+            display: flex;
+            justify-content: center;
+            align-content: center;
+            height: 100%;
+            width: 50%;
+            border-right: 1px solid white;
+            background-color: #333;
+            transition: background-color 0.3s;
+            color: #fff;
+        }
+
+        #joinMain {
+            height: 100vh;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+        }
+
+        #joinServe {
+            width: 50%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #joinServe form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+
+        }
+
+        #joinServe form input[type="email"],
+        #joinServe form input[type="password"],
+        #joinServe form input[type="text"],
+        #joinServe form input[type="tel"] {
+            padding: 10px;
+            width: 350px;
+            border: 0.5px solid black;
+            border-radius: 5px;
+        }
+
+        #button {
+            padding: 10px 20px;
+            width: 120px;
+            border-radius: 5px;
+            border: none;
+            background-color: lightgray;
+            color: #000;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        #button:hover {
+            background-color: #333;
+            color: #fff;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 30px;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        #root{
+            color: white;
+            text-decoration: none;
+
+        }
+    </style>
     <script>
+        window.addEventListener('DOMContentLoaded', (event) => {
+            var movieHeader = document.getElementById('MovieHeader');
+            setTimeout(function(){
+                movieHeader.classList.add('visible');
+            }, 300);
+        });
         function submitForm() {
             var email = document.getElementById("email").value;
             var password = document.getElementById("password").value;
@@ -33,38 +136,68 @@
                 body: JSON.stringify(data)
             })
                 .then(function(response) {
-                    if (response.ok) {
-                        // 요청이 성공적으로 완료됨
-                        console.log("회원 가입이 완료되었습니다.");
-                    } else {
-                        console.error("오류 발생");
+                    if(response.ok){
+                        window.location.href ="/login"
                     }
-                })
-                .catch(function(error) {
-                    console.error(error);
-                });
+                    return response.json()
+
+                }).then(
+                (json)=>{
+                    if(json.status === 200){
+                        window.location.href ="/login"
+                    }else{
+                      if(json.status ===400){
+                          if(json.message === "잘못된 형식의 번호입니다"){
+                              alert("잘못된 형식의 번호입니다")
+                          }
+                          if(json.message ==="잘못된 형식의 이메일 입니다"){
+                              alert("잘못된 형식의 이메일 입니다")
+                          }
+                          if(json.message ==="잘못된 형식의 데이터 입니다."){
+                              alert("잘못된 형식의 데이터 입니다.");
+                          }
+
+                      }
+                    }
+                    console.log(json)
+                }
+            )
+        }
+        function handleClick() {
+            var link = document.getElementById("joinLink");
+            link.classList.add("clicked");
         }
     </script>
 </head>
 <body>
-<h1>회원 가입</h1>
-<form>
-    <label for="email">이메일:</label>
-    <input type="email" id="email" required><br>
+<div id="joinMain">
+    <div id="header">
+        <h1 id="MovieHeader"><a id="root" href="/">Movie Review</a></h1>
 
-    <label for="password">비밀번호:</label>
-    <input type="password" id="password" required><br>
+    </div>
+    <div id="joinServe">
 
-    <label for="userName">사용자 이름:</label>
-    <input type="text" id="userName" required><br>
+    <form>
+        <h1>회원 가입</h1>
 
-    <label for="phoneNumber">전화번호:</label>
-    <input type="tel" id="phoneNumber" required><br>
+        <input type="email" id="email" placeholder="email" required><br>
 
-    <label for="nickName">닉네임:</label>
-    <input type="text" id="nickName" required><br>
 
-    <input type="button" value="가입" onclick="submitForm()">
-</form>
+        <input type="password" id="password" placeholder="password" required><br>
+
+        <input type="text" id="userName" placeholder="이름" required><br>
+
+
+        <input type="tel" id="phoneNumber" placeholder="전화번호" required><br>
+
+
+        <input type="text" id="nickName" placeholder="닉네임" required><br>
+
+        <button id="button" type="button" value="가입" onclick="submitForm()"> 가입</button>
+    </form>
+    </div>
+
+</div>
+
 </body>
 </html>

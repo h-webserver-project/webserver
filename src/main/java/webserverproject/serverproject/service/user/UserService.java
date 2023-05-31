@@ -5,6 +5,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import webserverproject.serverproject.auth.PrincipalDetails;
+import webserverproject.serverproject.error.CustomException;
+import webserverproject.serverproject.error.ErrorCode;
 import webserverproject.serverproject.model.User;
 import webserverproject.serverproject.repository.UserRepository;
 import webserverproject.serverproject.requestDTO.userDTO.UserJoinRequestDTO;
@@ -26,6 +28,9 @@ public class UserService implements UserServiceImpl {
 
     @Override
     public UserJoinResponseDTO createUser(UserJoinRequestDTO userJoinRequestDTO) {
+        if(userRepository.existsByEmail(userJoinRequestDTO.getEmail())){
+            throw  new CustomException(ErrorCode.BadUserException);
+        }
         User user = userJoinRequestDTO.toUserEntity(passwordEncoder.encode(userJoinRequestDTO.getPassword()), Role.ROLE_USER);
         userRepository.save(user);
         return  UserJoinResponseDTO.toUserJoinResponseDTO(user);

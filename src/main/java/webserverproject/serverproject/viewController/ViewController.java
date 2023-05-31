@@ -15,4 +15,14 @@ public class ViewController {
     public String login(){
         return "/login";
     }
+
+    @GetMapping("/")
+    public String main(){
+        return "/main";
+    }
+
+    @GetMapping("/movie")
+    public String mainLogin(){
+        return "/after";
+    }
 }

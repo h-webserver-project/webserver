@@ -9,6 +9,7 @@ public enum ErrorCode {
     BadException(400,"BadException","잘못된 접근 방식 입니다."),
     BadGradeException(400,"BadGradeException","점수는 0보다 작을 수 없고 5보다 클수 없습니다."),
     BadEmailException(400,"BadEmailException","잘못된 형식의 이메일 입니다"),
+    BadUserException(400,"BadUserException","해당 이메일이 존재 합니다"),
     BadPhoneNumberException(400,"BadPhoneNumberException","잘못된 형식의 번호입니다"),
     NotFoundUserException(404,"NotFoundUserException","계정이 존재하지 않습니다"),
     NotFoundMovieException(404,"NotFoundMovieException","영화가 존재하지 않습니다"),
