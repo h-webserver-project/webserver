@@ -61,9 +61,66 @@
     }
   </style>
   <script>
+    fetch("http://localhost:8080/api/admin/role", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": localStorage.getItem("jwtToken")
+
+      }
+
+    }).then(
+            (response)=>{
+              if(response.status === 403){
+                console.log(403)
+                fetch("http://localhost:8080/api/control/role", {
+                  method: "GET",
+                  headers: {
+                    "Authorization": localStorage.getItem("jwtToken")
+                  }
+                }).then(
+                        (response)=>{
+                          console.log(response)
+                          return response.json();
+                        }
+                ).then(
+                        (json)=>{
+                          console.log(json)
+                          if(json.status ===400){
+                            window.location.href ="/"
+                          }
+                          if(json.data.role === "ROLE_USER"){
+                            window.location.href ="/user"
+                          }
+                          if(json.data.role === "ROLE_ADMIN"){
+                            window.location.href="/admin"
+                          }
+                        }
+                );
+
+              }
+            }
+
+    ).then(
+            (response)=>{
+              console.log(response)
+              return response.json();
+            }
+    ).then(
+            (json)=>{
+              console.log(json)
+              if(json.data.role === "ROLE_USER"){
+                window.location.href ="/user"
+              }
+              if(json.data.role === "ROLE_ADMIN"){
+                window.location.href="/admin"
+              }
+            }
+    )
+
     function logout() {
       // Remove ACCESS_TOKEN from localStorage
-      localStorage.removeItem("ACCESS_TOKEN");
+      localStorage.removeItem("jwtToken");
 
       // Redirect to "/"
       window.location.href = "/";

@@ -51,9 +51,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers("/").permitAll()
 				.antMatchers("/login").permitAll()
 				.antMatchers("/join").permitAll()
-				.antMatchers("/movie").permitAll()
+				.antMatchers("/user").permitAll()
 				.antMatchers("/admin").permitAll()
-				.antMatchers("/api/user/role").permitAll()
+				.antMatchers("/api/user/role").hasRole("USER")
+				.antMatchers("/api/admin/role").hasRole("ADMIN")
+				.antMatchers("/api/control/role").permitAll()
 				.anyRequest().authenticated();
 		http.cors();
 		http.addFilterBefore(new JwtAuthorizationFilter(tokenProvider, userRepository), UsernamePasswordAuthenticationFilter.class);

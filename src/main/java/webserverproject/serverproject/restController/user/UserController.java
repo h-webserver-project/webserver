@@ -44,9 +44,20 @@ public class UserController {
         return ResponseEntity.ok().body("admin생성 완료");
     }
 
+    @GetMapping("/api/control/role")
+    public ResponseEntity<?> controlRole(Authentication authentication){
+        UserRoleResponseDTO userRoleResponseDTO = userService.roleUser(authentication);
+        return  ResponseEntity.ok().body(createResponse(userRoleResponseDTO,"유저 룰 조회"));
+    }
     // 유저 권한 추출
     @GetMapping("/api/user/role")
     public ResponseEntity<?> userRole(Authentication authentication){
+        UserRoleResponseDTO userRoleResponseDTO = userService.roleUser(authentication);
+        return  ResponseEntity.ok().body(createResponse(userRoleResponseDTO,"유저 룰 조회"));
+    }
+
+    @GetMapping("/api/admin/role")
+    public ResponseEntity<?> adminRole(Authentication authentication){
         UserRoleResponseDTO userRoleResponseDTO = userService.roleUser(authentication);
         return  ResponseEntity.ok().body(createResponse(userRoleResponseDTO,"유저 룰 조회"));
     }

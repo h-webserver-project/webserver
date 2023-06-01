@@ -21,9 +21,9 @@ public class ViewController {
         return "/main";
     }
 
-    @GetMapping("/movie")
+    @GetMapping("/user")
     public String mainLogin(){
-        return "/after";
+        return "user";
     }
 
     @GetMapping("/admin")

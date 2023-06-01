@@ -138,7 +138,7 @@
                         console.log("로그인이 완료되었습니다.");
                         console.log(jwtToken)
 
-                        return fetch("http://localhost:8080/api/user/role", {
+                        return fetch("http://localhost:8080/api/control/role", {
                             method: "GET",
                             headers: {
                                 "Authorization": localStorage.getItem("jwtToken")
@@ -158,7 +158,7 @@
                 (json)=>{
                     console.log(json)
                     if(json.data.role === "ROLE_USER"){
-                        window.location.href ="/movie"
+                        window.location.href ="/user"
                     }
                     if(json.data.role === "ROLE_ADMIN"){
                         window.location.href="/admin"
