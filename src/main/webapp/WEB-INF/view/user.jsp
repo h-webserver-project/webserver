@@ -62,7 +62,7 @@
     </style>
     <script>
 
-        fetch("http://localhost:8080/api/user/role", {
+        fetch("http://localhost:8081/api/user/role", {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
@@ -74,7 +74,7 @@
             (response)=>{
                 if(response.status === 403){
                     console.log(403)
-                    fetch("http://localhost:8080/api/control/role", {
+                    fetch("http://localhost:8081/api/control/role", {
                         method: "GET",
                         headers: {
                             "Authorization": localStorage.getItem("jwtToken")
@@ -96,6 +96,9 @@
                             }
                             if(json.data.role === "ROLE_ADMIN"){
                                 window.location.href="/admin"
+                            }
+                            if(json.status === 500){
+                                window.location.href ="/"
                             }
                         }
                     );

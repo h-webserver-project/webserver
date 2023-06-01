@@ -8,7 +8,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-  <title>쇼핑몰</title>
+  <title>Movie Review</title>
   <style>
     body {
       margin: 0;
@@ -61,7 +61,7 @@
     }
   </style>
   <script>
-    fetch("http://localhost:8080/api/admin/role", {
+    fetch("http://localhost:8081/api/admin/role", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -73,7 +73,7 @@
             (response)=>{
               if(response.status === 403){
                 console.log(403)
-                fetch("http://localhost:8080/api/control/role", {
+                fetch("http://localhost:8081/api/control/role", {
                   method: "GET",
                   headers: {
                     "Authorization": localStorage.getItem("jwtToken")
@@ -94,6 +94,9 @@
                           }
                           if(json.data.role === "ROLE_ADMIN"){
                             window.location.href="/admin"
+                          }
+                          if(json.status === 500){
+                            window.location.href ="/"
                           }
                         }
                 );

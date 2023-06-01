@@ -9,7 +9,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>로그인</title>
+    <title>Movie Review</title>
     <style>
         body {
             overflow: hidden;
@@ -120,7 +120,7 @@
                 password: password
             };
 
-            fetch("http://localhost:8080/api/login", {
+            fetch("http://localhost:8081/api/login", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -138,7 +138,7 @@
                         console.log("로그인이 완료되었습니다.");
                         console.log(jwtToken)
 
-                        return fetch("http://localhost:8080/api/control/role", {
+                        return fetch("http://localhost:8081/api/control/role", {
                             method: "GET",
                             headers: {
                                 "Authorization": localStorage.getItem("jwtToken")

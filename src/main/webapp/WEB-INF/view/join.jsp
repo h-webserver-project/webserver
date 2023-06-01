@@ -8,7 +8,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title>회원 가입</title>
+    <title>Movie Review</title>
     <style>
 
         body {
@@ -128,7 +128,7 @@
                 nickName: nickName
             };
 
-            fetch("http://localhost:8080/api/join", {
+            fetch("http://localhost:8081/api/join", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
