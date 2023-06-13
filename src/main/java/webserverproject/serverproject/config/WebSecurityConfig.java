@@ -46,13 +46,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
 				.antMatchers("/api/join").permitAll() //회원 가입
 				.antMatchers("/api/login").permitAll() // 로그인
-				.antMatchers("/api/moves").permitAll()
+				.antMatchers("/api/movies").permitAll()
 				.antMatchers("/api/admin").permitAll()
 				.antMatchers("/").permitAll()
 				.antMatchers("/login").permitAll()
 				.antMatchers("/join").permitAll()
 				.antMatchers("/user").permitAll()
 				.antMatchers("/admin").permitAll()
+				.antMatchers("/moviedetail/*").permitAll()
+				.antMatchers("/movieCreate").permitAll()
 				.antMatchers("/api/user/role").hasRole("USER")
 				.antMatchers("/api/admin/role").hasRole("ADMIN")
 				.antMatchers("/api/control/role").permitAll()
@@ -60,6 +62,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		http.cors();
 		http.addFilterBefore(new JwtAuthorizationFilter(tokenProvider, userRepository), UsernamePasswordAuthenticationFilter.class);
 		http.addFilterBefore(new JwtAuthenticationFilter(authenticationManager(), tokenProvider), UsernamePasswordAuthenticationFilter.class);
+
 	}
 
 }

@@ -23,11 +23,19 @@ public class ViewController {
 
     @GetMapping("/user")
     public String mainLogin(){
-        return "user";
+        return "/user";
     }
 
     @GetMapping("/admin")
     public String adminLogin(){
         return "/admin";
+    }
+
+    @GetMapping("/movieCreate")
+    public String movieCreate(){return "/movieCreate";}
+
+    @GetMapping("/moviedetail")
+    public String movieDetail(){
+        return "/moviedetail";
     }
 }
