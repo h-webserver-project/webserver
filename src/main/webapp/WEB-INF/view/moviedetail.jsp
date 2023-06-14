@@ -239,6 +239,58 @@
             letter-spacing: 0.3px;
             text-indent: 1rem;
         }
+        .container {
+            display: flex;
+        }
+
+        .image-container {
+            width: 50%;
+            display: flex; /* Add this line */
+            justify-content: flex-end; /* Modify this line */
+        }
+
+        .image-container img {
+            max-width: calc(100vh * 0.2 * (4/3)); /* 4:3 is the image's aspect ratio, Change to your image aspect ratio */
+            max-height: 50vh; /* Modified to 20% of the viewport height */
+            object-fit: contain;
+            height: auto;
+            border: 1px solid #888; /* Add this line to create a border */
+            border-radius: 10px; /* Add this line to round the corners */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.25); /* Add this line for a drop shadow */
+            margin: 20px;
+        }
+
+        .info {
+            width: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            padding: 20px;
+        }
+
+        .info-container {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            gap: 10px;
+        }
+
+        .info-container h1,
+        .info-container h2,
+        .info-container h3 {
+            margin: 0;
+            padding: 0;
+            font-weight: bold;
+        }
+
+        .info-container p {
+            margin: 0;
+            padding: 0;
+            text-align: left;
+        }
+
+
 
     </style>
     <script>
@@ -302,9 +354,7 @@
                 .catch(error => {
                     console.error('Error:', error);
                 });
-            // location.reload(); // 성공적으로 응답이 오면 페이지 새로고침
-
-
+            location.reload(); // 성공적으로 응답이 오면 페이지 새로고침
 
         }
 
@@ -382,6 +432,62 @@
         }
         fetchReviews();
 
+        function findMovie(){
+            const movieId = getMovieIdFromUrl();
+            const getReviews = "http://localhost:8081/api/movie/info/"+movieId;
+            fetch(getReviews, {
+                method: "GET",
+                headers: {
+                 "Content-Type": "application/json",
+                 "Authorization": localStorage.getItem("jwtToken")
+                }
+            })
+             .then((response) => response.json())
+             .then((data) => {
+                 console.log(data)
+                 const title = data.data.title;
+                 const director = data.data.director;
+                 const imgUrl = data.data.imgUrl;
+                 const productYear = data.data.productYear;
+                 const summary = data.data.summary;
+                 const averageGrade = data.data.averageGrade;
+
+                 const imageContainer = document.querySelector('.image-container');
+                 const infoContainer = document.querySelector('.info-container');
+
+                 // 이미지 요소 생성
+                 const imageElement = document.createElement('img');
+                 imageElement.src = imgUrl;
+                 imageElement.alt = title;
+                 imageContainer.appendChild(imageElement);
+
+                 // 영화 정보를 표시하는 요소 생성
+                 const titleElement = document.createElement('h2');
+                 titleElement.textContent = title;
+                 infoContainer.appendChild(titleElement);
+
+                 const directorElement = document.createElement('p');
+                 directorElement.textContent = '감독: ' + director;
+                 infoContainer.appendChild(directorElement);
+
+                 const productYearElement = document.createElement('p');
+                 productYearElement.textContent = '개봉일: ' + productYear;
+                 infoContainer.appendChild(productYearElement);
+
+                 const summaryElement = document.createElement('p');
+                 summaryElement.textContent = '요약: ' + summary;
+                 infoContainer.appendChild(summaryElement);
+
+                 const averageGradeElement = document.createElement('p');
+                 averageGradeElement.textContent = '평균 평점: ' + averageGrade;
+                 infoContainer.appendChild(averageGradeElement);
+
+             })
+             .catch((error) => {
+                 console.error("Error not Found movies:", error);
+             });
+        }
+        findMovie();
     </script>
 </head>
 <body>
@@ -391,11 +497,19 @@
         <input type="text" name="query" placeholder="검색어를 입력하세요" />
     </form>
     <ul>
-        <li><a href="/mypage">마이페이지</a></li>
+        <li><a href="/myinfo">마이페이지</a></li>
     </ul>
 </div>
 
-<div id="movieMain">
+<div class="container">
+    <div class="image-container">
+        <!-- 이미지는 이곳에 등록됩니다 -->
+    </div>
+    <div class="info">
+        <div class="info-container">
+        <!-- 영화 정보는 이곳에 표시됩니다 -->
+        </div>
+    </div>
 </div>
 
 <div id="reviewMain">
@@ -405,7 +519,7 @@
         <span id="viewBtn" onclick="showReviewList()">보기</span>
     </div>
 
-    <div id="ShowReviewList">
+    <div id="ShowReviewList" style="display: none;">
 
     </div>
 

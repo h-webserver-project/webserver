@@ -123,7 +123,7 @@
     <input type="text" name="search" placeholder="검색어를 입력하세요">
   </form>
   <ul>
-    <li><a href="/movieCreate">물건올리기</a></li>
+    <li><a href="/movieCreate">영화 등록</a></li>
     <li><a onclick="logout()">로그아웃</a></li>
   </ul>
 </div>

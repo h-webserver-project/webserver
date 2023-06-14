@@ -108,6 +108,55 @@
         #info strong {
             font-weight: bold;
         }
+        /*리뷰 목록*/
+        .review-item {
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin: 10px 0;
+        }
+
+        .review-item h3 {
+            margin: 8px 0;
+        }
+
+        .review-item p {
+            margin: 4px 0;
+        }
+
+        .review-item button {
+            border: none;
+            background-color: transparent;
+            color: #999;
+            cursor: pointer;
+        }
+
+        .review-item button:hover {
+            text-decoration: underline;
+        }
+
+        #reviewall {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 50%;
+            height: 100%;
+        }
+
+        #review {
+            width: 50%;
+            height: 80%;
+            overflow-y: scroll;
+            scrollbar-width: none;
+        }
+
+        #review::-webkit-scrollbar {
+            display: none;
+        }
+
+
+
+
     </style>
     <script>
 
@@ -186,19 +235,88 @@
                     console.log(response)
                     response.json();
                 })
-                .then(function(data) {
+                .then((data) =>  {
                     console.log(data)
-                    // 받은 데이터를 화면에 표시
-                    document.getElementById('email').innerText = data.data.email;
-                    document.getElementById('username').innerText = data.data.userName;
-                    document.getElementById('phone').innerText = data.data.phoneNumber;
-                    document.getElementById('nickname').innerText = data.data.nickName;
+                    //받은 데이터를 화면에 표시
+                    console.log(data.data.email);
+                    console.log(data.data.userName);
+                    console.log(data.data.phoneNumber);
+                    console.log(data.data.nickName);
+
+                    // document.getElementById('email').innerText = data.data.email;
+                    // document.getElementById('username').innerText = data.data.userName;
+                    // document.getElementById('phone').innerText = data.data.phoneNumber;
+                    // document.getElementById('nickname').innerText = data.data.nickName;
                 })
                 .catch(function(error) {
                     console.log('Error:', error);
                 });
         }
         fetchInfo();
+
+        function fetchReviews() {
+            fetch("http://localhost:8081/api/reviews", {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": localStorage.getItem("jwtToken")
+                }
+            })
+                .then((response) => response.json())
+                .then((data) => {
+                    console.log(data)
+                    const reviewsContainer = document.getElementById("review");
+
+                    reviewsContainer.innerHTML = "";
+
+                    data.data.forEach((review) => {
+                        const title = review.title;
+                        const content = review.content;
+                        const grade = review.grade;
+                        const id = review.id;
+
+                        const reviewItem = document.createElement("div");
+
+                        reviewItem.className = "review-item";
+
+                        // reviewItem.innerHTML = "<div>"+grade+"점"+"</div>"+"<h3>" +"제목 : " + title + "</h3>"  + "<p>" + content + "</p>"+"<br>"
+                        //     +"<span id="deleteBtn">"+"제거"+"</span>";
+                        reviewItem.innerHTML = "<div>" + grade + "점</div>" + "<h3>제목 : " + title + "</h3>" + "<p>" + content + "</p>" + "<br>" +   "<button id='deleteBtn'>" + "제거" + "</button>";
+
+                        // Get reference to the delete button span
+                        const deleteBtn = reviewItem.querySelector("#deleteBtn");
+
+                        // Add event listener for the delete button
+                        deleteBtn.addEventListener("click", function() {
+                            deleteReview(id);
+                        });
+
+                        reviewsContainer.appendChild(reviewItem);
+                    });
+                })
+                .catch((error) => {
+                    console.error("Error fetching reviewes:", error);
+                });
+        }
+        fetchReviews();
+
+        function deleteReview(id) {
+            // Your logic to remove the review goes here
+            const deleteUrl = "http://localhost:8081/api/review/delete/"+id;
+            console.log(deleteUrl);
+            fetch(deleteUrl, {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": localStorage.getItem("jwtToken")
+                }
+            })
+                .then((response) => response.json())
+                .catch((error) => {
+                    console.error("Error fetching delete:", error);
+                });
+        }
+
     </script>
 </head>
 <body>
@@ -224,8 +342,10 @@
     </div>
     <div id="reviewall">
         <div id="review">
-            <h1>내 리뷰</h1>
-        </div>review</div>
+
+
+
+        </div>
     </div>
 </div>
 
