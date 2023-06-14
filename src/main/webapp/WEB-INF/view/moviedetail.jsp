@@ -253,7 +253,7 @@
                         alert("잘못된 형식의 데이터 입니다.");
                     }
 
-                    return response.json()})
+                     response.json()})
                 .then(data => {
                     console.log('Create movie API Response:', data);
                     console.log(data.status)

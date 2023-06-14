@@ -66,6 +66,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers("/api/review/movie/all/*").hasRole("USER")
 				.antMatchers("/api/review").hasRole("USER")
 				.antMatchers("/api/review/delete/*").permitAll()
+				.antMatchers("/myinfo").permitAll()
 				.anyRequest().authenticated();
 		http.cors();
 		http.addFilterBefore(new JwtAuthorizationFilter(tokenProvider, userRepository), UsernamePasswordAuthenticationFilter.class);
