@@ -160,7 +160,7 @@
     </style>
     <script>
 
-        fetch("http://localhost:8081/api/user/role", {
+        fetch("http://59.26.59.60:8081/api/user/role", {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
@@ -172,15 +172,15 @@
             (response)=>{
                 if(response.status === 403){
                     console.log(403)
-                    fetch("http://localhost:8081/api/control/role", {
+                    fetch("http://59.26.59.60:8081/api/control/role", {
                         method: "GET",
                         headers: {
                             "Authorization": localStorage.getItem("jwtToken")
                         }
                     }).then(
                         (response)=>{
-                            console.log(response)
-                            return response.json();
+                            //console.log(response)
+                            response.json();
                         }
                     ).then(
                         (json)=>{
@@ -223,7 +223,7 @@
 
 
         function fetchInfo(){
-            fetch('http://localhost:8081/api/user/info',
+            fetch('http://59.26.59.60:8081/api/user/info',
                 {
                     method: "GET",
                     headers: {
@@ -233,7 +233,8 @@
                 })
                 .then(function(response) {
                     console.log(response)
-                    response.json();
+                    //response.json();
+                    console.log(response.json())
                 })
                 .then((data) =>  {
                     console.log(data)
@@ -255,7 +256,7 @@
         fetchInfo();
 
         function fetchReviews() {
-            fetch("http://localhost:8081/api/reviews", {
+            fetch("http://59.26.59.60:8081/api/reviews", {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
@@ -302,7 +303,7 @@
 
         function deleteReview(id) {
             // Your logic to remove the review goes here
-            const deleteUrl = "http://localhost:8081/api/review/delete/"+id;
+            const deleteUrl = "http://59.26.59.60:8081/api/review/delete/"+id;
             console.log(deleteUrl);
             fetch(deleteUrl, {
                 method: "DELETE",
@@ -326,7 +327,7 @@
         <input type="text" name="search" placeholder="검색어를 입력하세요">
     </form>
     <ul>
-        <li><a href="/login">내정보</a></li>
+        <li><a href="/myinfo">내정보</a></li>
         <li><a onclick="logout()">로그아웃</a></li>
     </ul>
 </div>

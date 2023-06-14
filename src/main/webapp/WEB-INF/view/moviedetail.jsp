@@ -323,7 +323,7 @@
                 grade: grade,
             };
 
-            const postReviewUrl = "http://localhost:8081/api/review/create/"+movieId;
+            const postReviewUrl = "http://59.26.59.60:8081/api/review/create/"+movieId;
             console.log(postReviewUrl);
             fetch(postReviewUrl, {
                 method: 'POST',
@@ -397,7 +397,7 @@
 
         function fetchReviews() {
             const movieId = getMovieIdFromUrl(); // getMovieIdFromUrl() 함수를 사용하여 movieId 값을 가져옵니다.
-            const getReviews = "http://localhost:8081/api/review/movie/all/"+movieId;
+            const getReviews = "http://59.26.59.60:8081/api/review/movie/all/"+movieId;
             fetch(getReviews, {
                 method: "GET",
                 headers: {
@@ -434,7 +434,7 @@
 
         function findMovie(){
             const movieId = getMovieIdFromUrl();
-            const getReviews = "http://localhost:8081/api/movie/info/"+movieId;
+            const getReviews = "http://59.26.59.60:8081/api/movie/info/"+movieId;
             fetch(getReviews, {
                 method: "GET",
                 headers: {

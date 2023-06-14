@@ -10,6 +10,11 @@ public class ReviewMovieAllResponseDTO {
     private String title;
     private String content;
     private  long grade;
+    private String nickName;
+
+    public String getNickName() {
+        return nickName;
+    }
 
     public long getId() {
         return id;
@@ -27,14 +32,15 @@ public class ReviewMovieAllResponseDTO {
         return grade;
     }
 
-    public ReviewMovieAllResponseDTO(long id, String title, String content, long grade) {
+    public ReviewMovieAllResponseDTO(long id, String title, String content, long grade, String nickName) {
         this.id = id;
         this.title = title;
         this.content = content;
         this.grade = grade;
+        this.nickName = nickName;
     }
 
     public static ReviewMovieAllResponseDTO toReviewMovieAllResponseDTO(Review review){
-        return  new ReviewMovieAllResponseDTO(review.getId(),review.getTitle(),review.getContent(),review.getGrade());
+        return  new ReviewMovieAllResponseDTO(review.getId(),review.getTitle(),review.getContent(),review.getGrade(), review.getUser().getNickName());
     }
 }

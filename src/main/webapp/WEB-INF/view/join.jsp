@@ -128,7 +128,7 @@
                 nickName: nickName
             };
 
-            fetch("http://localhost:8081/api/join", {
+            fetch("http://59.26.59.60:8081/api/join", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"

@@ -120,7 +120,7 @@
                 password: password
             };
 
-            fetch("http://localhost:8081/api/login", {
+            fetch("http://59.26.59.60:8081/api/login", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -138,7 +138,7 @@
                         console.log("로그인이 완료되었습니다.");
                         console.log(jwtToken)
 
-                        return fetch("http://localhost:8081/api/control/role", {
+                        return fetch("http://59.26.59.60:8081/api/control/role", {
                             method: "GET",
                             headers: {
                                 "Authorization": localStorage.getItem("jwtToken")

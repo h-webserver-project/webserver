@@ -109,14 +109,14 @@
         const searchs =  urlParams.get('search');
 
 
-        fetch("http://localhost:8081/api/admin", {
+        fetch("http://59.26.59.60:8081api/admin", {
             method: "GET",
             headers: {
                 "Content-Type": "application/json"
             }
         })
         function fetchMovies() {
-            fetch("http://localhost:8081/api/movie/search/"+searchs, {
+            fetch("http://59.26.59.60:8081/api/movie/search/"+searchs, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",

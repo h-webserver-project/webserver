@@ -115,7 +115,7 @@
     </style>
     <script>
 
-        fetch("http://localhost:8081/api/user/role", {
+        fetch("http://59.26.59.60:8081/api/user/role", {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
@@ -127,7 +127,7 @@
             (response)=>{
                 if(response.status === 403){
                     console.log(403)
-                    fetch("http://localhost:8081/api/control/role", {
+                    fetch("http://59.26.59.60:8081/api/control/role", {
                         method: "GET",
                         headers: {
                             "Authorization": localStorage.getItem("jwtToken")
@@ -170,7 +170,7 @@
         }
 
         function fetchMovies() {
-            fetch("http://localhost:8081/api/movies", {
+            fetch("http://59.26.59.60:8081/api/movies", {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
