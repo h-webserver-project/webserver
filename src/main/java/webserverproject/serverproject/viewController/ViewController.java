@@ -51,5 +51,10 @@ public class ViewController {
     public String movieSearch(){
         return "moviesearch";
     }
+
+    @GetMapping("/myinfo")
+    public String myInfo(){
+        return "myinfo";
+    }
 }
 

@@ -118,7 +118,7 @@
 </head>
 <body>
 <div id="header">
-    <h1>Movie Review</h1>
+    <h1 onclick="main()" id="main" style="cursor:pointer">Movie Review</h1>
     <form id="searchForm"  action="/admin/moviesearch/" method="GET">
         <input type="text" name="search" placeholder="검색어를 입력하세요">
     </form>
@@ -155,7 +155,7 @@
                 }).then(
                     (response)=>{
                         console.log(response)
-                        return response.json();
+                        response.json();
                     }
                 ).then(
                     (json)=>{
@@ -246,38 +246,9 @@
     fetchMovies();
 
 
-    document.getElementById("searchForm").addEventListener("submit", function(event) {
-        event.eventpreventDefault();
+    function main(){
 
-        submitSearchForm
-
-        submit
-        submitSearchForm();
-    });
-
-
-    document.getElementById("searchForm").querySelector("input[name='query']").addEventListener("keydown", function(event) {
-        if (event.keyCode === 13) { // Check if Enter/Return key is pressed (key code 13)
-            event.
-
-            preventDefault();
-
-            submitSearchForm
-
-
-            submitSearchForm();
-        }
-    });
-
-
-    function submitSearchForm() {
-        const query = document.getElementById("searchForm").querySelector("input[name='query']").value;
-
-
-        const url = "/moviesearch/?search=" + encodeURIComponent(query);
-
-
-        window.location.href = url; // Redirect to the moviesearch page with the search query parameter
+        window.location.href = "/admin";
     }
 </script>
 </body>
