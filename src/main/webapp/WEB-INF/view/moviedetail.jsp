@@ -249,7 +249,7 @@
                         // window.location.href= "/admin";
                     }
 
-                    if(data.status === 400){
+                    if(response.status === 400){
                         alert("잘못된 형식의 데이터 입니다.");
                     }
 
@@ -287,9 +287,6 @@
 </div>
 
 <div id="movieMain">
-    <얖
-
-
 </div>
 
 <div id="reviewMain">
