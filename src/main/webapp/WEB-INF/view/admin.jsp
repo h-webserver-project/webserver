@@ -119,8 +119,8 @@
 <body>
 <div id="header">
   <h1>Movie Review</h1>
-  <form id="searchForm" action="/search" method="GET">
-    <input type="text" name="query" placeholder="검색어를 입력하세요">
+  <form id="searchForm"  action="/admin/moviesearch/" method="GET">
+    <input type="text" name="search" placeholder="검색어를 입력하세요">
   </form>
   <ul>
     <li><a href="/movieCreate">물건올리기</a></li>
@@ -238,6 +238,42 @@
             });
   }
   fetchMovies();
+
+
+  document.getElementById("searchForm").addEventListener("submit", function(event) {
+    event.eventpreventDefault();
+
+    submitSearchForm
+
+    submit
+    submitSearchForm();
+  });
+
+
+  document.getElementById("searchForm").querySelector("input[name='query']").addEventListener("keydown", function(event) {
+    if (event.keyCode === 13) { // Check if Enter/Return key is pressed (key code 13)
+      event.
+
+      preventDefault();
+
+      submitSearchForm
+
+
+      submitSearchForm();
+    }
+  });
+
+
+  function submitSearchForm() {
+    const query = document.getElementById("searchForm").querySelector("input[name='query']").value;
+
+
+    const url = "/moviesearch/?search=" + encodeURIComponent(query);
+
+
+    window.location.href = url; // Redirect to the moviesearch page with the search query parameter
+  }
+
 </script>
 </body>
 </html>

@@ -136,8 +136,8 @@
 <body>
 <div id="header">
     <h1>Movie Review</h1>
-    <form id="searchForm" action="/search" method="GET">
-        <input type="text" name="query" placeholder="검색어를 입력하세요">
+    <form id="searchForm" action="/admin/moviesearch" method="GET">
+        <input type="text" name="search" placeholder="검색어를 입력하세요">
     </form>
     <ul>
         <li><a href="/movieCreate">물건올리기</a></li>

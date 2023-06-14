@@ -18,4 +18,6 @@ public interface MovieServiceImpl {
 
     void deleteMovie(long movieId);
 
+    List<MovieGetResponseDTO> searchMovie(String title);
+
 }

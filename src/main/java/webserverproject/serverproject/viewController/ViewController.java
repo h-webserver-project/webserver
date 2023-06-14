@@ -38,4 +38,18 @@ public class ViewController {
     public String movieDetail(){
         return "/moviedetail";
     }
+    @GetMapping("/user/moviesearch")
+    public String usermovieSearch(){
+        return "usersearch";
+    }
+
+    @GetMapping("/admin/moviesearch")
+    public String adminmovieSearch(){
+        return "adminsearch";
+    }
+    @GetMapping("/moviesearch")
+    public String movieSearch(){
+        return "moviesearch";
+    }
 }
+

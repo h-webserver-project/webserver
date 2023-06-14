@@ -76,4 +76,16 @@ public class MovieService implements MovieServiceImpl {
         }
         movieRepository.delete(movie);
     }
+
+    @Override
+    public List<MovieGetResponseDTO> searchMovie(String title) {
+        List<Movie> movies = movieRepository.findSearchMovie(title);
+        List<MovieGetResponseDTO> movieGetResponseDTOS = new ArrayList<>();
+
+        for(Movie movie : movies){
+            movieGetResponseDTOS.add(MovieGetResponseDTO.movieGetResponseDTO(movie));
+        }
+        Collections.reverse(movieGetResponseDTOS);
+        return movieGetResponseDTOS;
+    }
 }

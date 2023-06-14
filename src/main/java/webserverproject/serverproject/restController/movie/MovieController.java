@@ -62,6 +62,13 @@ public class MovieController {
         return ResponseEntity.ok().body("영화 삭제가 완료되었습니다.");
     }
 
+    // 영화 찾기
+    @GetMapping("/api/movie/search/{search}")
+    public ResponseEntity<?> searchMovie(@PathVariable(value = "search") @Valid  String search){
+        List<MovieGetResponseDTO> movieSearchResponseDTOS = movieService.searchMovie(search);
+        return ResponseEntity.ok().body(createResponse(movieSearchResponseDTOS,"찾기 성공"));
+    }
+
 
 
     // 영화 수정

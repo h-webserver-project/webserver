@@ -1,8 +1,16 @@
+
+buildscript {
+	ext {
+		queryDslVersion = "5.0.0"
+	}
+}
+
 plugins {
 	id 'java'
 	id 'war'
 	id 'org.springframework.boot' version '2.7.11'
 	id 'io.spring.dependency-management' version '1.0.15.RELEASE'
+	id "com.ewerk.gradle.plugins.querydsl" version "1.0.10" // querydsl 플러그인
 }
 
 group = 'webserverproject'
@@ -32,6 +40,11 @@ dependencies {
 	testImplementation 'org.springframework.security:spring-security-test'
 		// jsp
 	implementation "org.apache.tomcat.embed:tomcat-embed-jasper"
+
+
+	//querydsl 추가
+	implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"
+	implementation "com.querydsl:querydsl-apt:${queryDslVersion}"
 	
 	
 		//jwt 인증 용도
@@ -44,3 +57,24 @@ dependencies {
 tasks.named('test') {
 	useJUnitPlatform()
 }
+
+def querydslDir = "$buildDir/generated/querydsl" // querydsl에서 사용할 경로 선언
+
+querydsl { // querydsl 설정 추가
+	jpa = true
+	querydslSourcesDir = querydslDir
+}
+sourceSets { // 빌드시 사용할 sourceset 추가
+	main.java.srcDir querydslDir
+}
+compileQuerydsl{
+	options.annotationProcessorPath = configurations.querydsl
+}
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+	querydsl.extendsFrom compileClasspath
+}
+
