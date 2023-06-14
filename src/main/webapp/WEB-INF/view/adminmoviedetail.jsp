@@ -1,8 +1,8 @@
 <%--
   Created by IntelliJ IDEA.
   User: jjong
-  Date: 2023-06-13
-  Time: 오전 3:48
+  Date: 2023-06-15
+  Time: 오전 2:58
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
@@ -295,6 +295,69 @@
     </style>
     <script>
 
+        fetch("http://59.26.59.60:8081/api/admin/role", {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": localStorage.getItem("jwtToken")
+
+            }
+
+        }).then(
+            (response)=>{
+                if(response.status === 403){
+                    console.log(403)
+                    fetch("http://59.26.59.60:8081/api/control/role", {
+                        method: "GET",
+                        headers: {
+                            "Authorization": localStorage.getItem("jwtToken")
+                        }
+                    }).then(
+                        (response)=>{
+                            console.log(response)
+                            response.json();
+                        }
+                    ).then(
+                        (json)=>{
+                            console.log(json)
+
+                            if(json===undefined){
+                                window.location.href ="/"
+                            }
+
+                            if(json.data.role === "ROLE_USER"){
+                                window.location.href ="/user"
+                            }
+                            if(json.data.role === "ROLE_ADMIN"){
+                                window.location.href="/admin"
+                            }
+                            if(json.status === 500){
+                                window.location.href ="/"
+                            }
+                        }
+                    );
+
+                }
+            }
+
+        ).then(
+            (response)=>{
+                console.log(response)
+                response.json();
+            }
+        ).then(
+            (json)=>{
+                console.log(json)
+                if(json.data.role === "ROLE_USER"){
+                    window.location.href ="/user"
+                }
+                if(json.data.role === "ROLE_ADMIN"){
+                    window.location.href="/admin"
+                }
+            }
+        )
+
+
         function getMovieIdFromUrl() {
             const queryString = window.location.search;
             const urlParams = new URLSearchParams(queryString);
@@ -337,14 +400,14 @@
 
                     if(response.status=== 200){
                         console.log("리뷰가 작성되었습니다.")
-                        window.location.href= "/moviedetail/?movie"+movieId;
+                        // window.location.href= "/admin";
                     }
 
                     if(response.status === 400){
                         alert("잘못된 형식의 데이터 입니다.");
                     }
 
-                     response.json()})
+                    response.json()})
                 .then(data => {
                     console.log('Create movie API Response:', data);
                     console.log(data.status)
@@ -352,48 +415,14 @@
                     // 추가 작업 수행
                 })
                 .catch(error => {
-                    window.location.href = "/";
+                    console.error('Error:', error);
                 });
             location.reload(); // 성공적으로 응답이 오면 페이지 새로고침
 
         }
 
-        function showReviewList() {
-            const reviewServer = document.querySelector('#reviewServe');
-            const reviewList = document.querySelector('#ShowReviewList');
 
-            reviewServer.style.display = 'none';
-            reviewList.style.display = 'block';
 
-            // change the style of the button
-            const viewBtn = document.querySelector('#viewBtn');
-            viewBtn.style.backgroundColor = '#2196f3';
-            viewBtn.style.color = 'white';
-            viewBtn.style.cursor = 'default';
-
-            // change the style of the register button
-            const registerBtn = document.querySelector('#registerBtn');
-            registerBtn.style.backgroundColor = '#ddd';
-            registerBtn.style.color = '#333';
-            registerBtn.style.cursor = 'pointer';
-        }
-        function showReviewAdd(){
-            const reviewServer = document.querySelector('#reviewServe');
-            const reviewList = document.querySelector('#ShowReviewList');
-            reviewServer.style.display = 'block';
-            reviewList.style.display = 'none';
-            // change the style of the view button
-            const viewBtn = document.querySelector('#viewBtn');
-            viewBtn.style.backgroundColor = '#ddd';
-            viewBtn.style.color = '#333';
-            viewBtn.style.cursor = 'pointer';
-
-            // change the style of the register button
-            const registerBtn = document.querySelector('#registerBtn');
-            registerBtn.style.backgroundColor = '#2196f3';
-            registerBtn.style.color = 'white';
-            registerBtn.style.cursor = 'default';
-        }
 
         function fetchReviews() {
             const movieId = getMovieIdFromUrl(); // getMovieIdFromUrl() 함수를 사용하여 movieId 값을 가져옵니다.
@@ -425,8 +454,6 @@
 
                         reviewsContainer.appendChild(reviewItem);
                     });
-
-
                 })
                 .catch((error) => {
                     console.error("Error fetching reviewes:", error);
@@ -440,54 +467,54 @@
             fetch(getReviews, {
                 method: "GET",
                 headers: {
-                 "Content-Type": "application/json",
-                 "Authorization": localStorage.getItem("jwtToken")
+                    "Content-Type": "application/json",
+                    "Authorization": localStorage.getItem("jwtToken")
                 }
             })
-             .then((response) => response.json())
-             .then((data) => {
-                 console.log(data)
-                 const title = data.data.title;
-                 const director = data.data.director;
-                 const imgUrl = data.data.imgUrl;
-                 const productYear = data.data.productYear;
-                 const summary = data.data.summary;
-                 const averageGrade = data.data.averageGrade;
+                .then((response) => response.json())
+                .then((data) => {
+                    console.log(data)
+                    const title = data.data.title;
+                    const director = data.data.director;
+                    const imgUrl = data.data.imgUrl;
+                    const productYear = data.data.productYear;
+                    const summary = data.data.summary;
+                    const averageGrade = data.data.averageGrade;
 
-                 const imageContainer = document.querySelector('.image-container');
-                 const infoContainer = document.querySelector('.info-container');
+                    const imageContainer = document.querySelector('.image-container');
+                    const infoContainer = document.querySelector('.info-container');
 
-                 // 이미지 요소 생성
-                 const imageElement = document.createElement('img');
-                 imageElement.src = imgUrl;
-                 imageElement.alt = title;
-                 imageContainer.appendChild(imageElement);
+                    // 이미지 요소 생성
+                    const imageElement = document.createElement('img');
+                    imageElement.src = imgUrl;
+                    imageElement.alt = title;
+                    imageContainer.appendChild(imageElement);
 
-                 // 영화 정보를 표시하는 요소 생성
-                 const titleElement = document.createElement('h2');
-                 titleElement.textContent = title;
-                 infoContainer.appendChild(titleElement);
+                    // 영화 정보를 표시하는 요소 생성
+                    const titleElement = document.createElement('h2');
+                    titleElement.textContent = title;
+                    infoContainer.appendChild(titleElement);
 
-                 const directorElement = document.createElement('p');
-                 directorElement.textContent = '감독: ' + director;
-                 infoContainer.appendChild(directorElement);
+                    const directorElement = document.createElement('p');
+                    directorElement.textContent = '감독: ' + director;
+                    infoContainer.appendChild(directorElement);
 
-                 const productYearElement = document.createElement('p');
-                 productYearElement.textContent = '개봉일: ' + productYear;
-                 infoContainer.appendChild(productYearElement);
+                    const productYearElement = document.createElement('p');
+                    productYearElement.textContent = '개봉일: ' + productYear;
+                    infoContainer.appendChild(productYearElement);
 
-                 const summaryElement = document.createElement('p');
-                 summaryElement.textContent = '요약: ' + summary;
-                 infoContainer.appendChild(summaryElement);
+                    const summaryElement = document.createElement('p');
+                    summaryElement.textContent = '요약: ' + summary;
+                    infoContainer.appendChild(summaryElement);
 
-                 const averageGradeElement = document.createElement('p');
-                 averageGradeElement.textContent = '평균 평점: ' + averageGrade;
-                 infoContainer.appendChild(averageGradeElement);
+                    const averageGradeElement = document.createElement('p');
+                    averageGradeElement.textContent = '평균 평점: ' + averageGrade;
+                    infoContainer.appendChild(averageGradeElement);
 
-             })
-             .catch((error) => {
-                 console.error("Error not Found movies:", error);
-             });
+                })
+                .catch((error) => {
+                    console.error("Error not Found movies:", error);
+                });
         }
         findMovie();
 
@@ -499,18 +526,40 @@
             window.location.href = "/";
         }
 
+        function  deleteMovie(){
 
+            const movieId = getMovieIdFromUrl();
+
+            fetch("http://59.26.59.60:8081/api/movie/delete/"+movieId, {
+                method: 'DELETE',
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": localStorage.getItem("jwtToken")
+                }
+            })
+                .then(response => {
+                    if (response.ok) {
+                        window.location.href ="/admin"
+                    } else {
+                        console.log('영화 삭제에 실패했습니다.');
+                    }
+                })
+                .catch(error => {
+                    console.error('네트워크 에러:', error);
+                });
+        }
         function main(){
 
-            window.location.href = "/user";
+            window.location.href = "/admin";
         }
+
     </script>
 </head>
 <body>
-<div onclick="main()" id="header">
+<div id="header" onclick="main()">
     <h1>Movie Review</h1>
     <ul>
-        <li><a href="/myinfo">내정보</a></li>
+        <li><a href="/movieCreate">영화 등록</a></li>
         <li><a onclick="logout()">로그아웃</a></li>
     </ul>
 </div>
@@ -522,7 +571,7 @@
 
     <div class="info">
         <div class="info-container">
-        <!-- 영화 정보는 이곳에 표시됩니다 -->
+            <!-- 영화 정보는 이곳에 표시됩니다 -->
         </div>
     </div>
 </div>
@@ -530,53 +579,15 @@
 <div id="reviewMain">
     <h3>Review</h3>
     <div>
-        <span id="registerBtn" onclick="showReviewAdd()">등록</span>
-        <span id="viewBtn" onclick="showReviewList()">보기</span>
+        <span id="registerBtn">보기</span>
+        <span id="viewBtn" onclick="deleteMovie()">삭제</span>
     </div>
 
-    <div id="ShowReviewList" style="display: none;">
+    <div id="ShowReviewList">
 
     </div>
 
-    <div id="reviewServe">
-        <form>
-            <label>평점</label>
-            <div class="starpoint_wrap">
-                <div class="starpoint_box">
-                    <label for="starpoint_1" class="label_star" title="0.5"><span class="blind">0.5점</span></label>
-                    <label for="starpoint_2" class="label_star" title="1"><span class="blind">1점</span></label>
-                    <label for="starpoint_3" class="label_star" title="1.5" ><span class="blind">1.5점</span></label >
-                    <label for="starpoint_4" class="label_star" title="2"><span class="blind">2점</span></label>
-                    <label for="starpoint_5" class="label_star" title="2.5" ><span class="blind">2.5점</span></label>
-                    <label for="starpoint_6" class="label_star" title="3" ><span class="blind">3점</span></label>
-                    <label for="starpoint_7" class="label_star" title="3.5" ><span class="blind">3.5점</span></label>
-                    <label for="starpoint_8" class="label_star" title="4" ><span class="blind">4점</span></label>
-                    <label for="starpoint_9" class="label_star" title="4.5" ><span class="blind">4.5점</span></label>
-                    <label for="starpoint_10" class="label_star" title="5" ><span class="blind">5점</span></label >
-                    <input type="radio" name="starpoint" id="starpoint_1" class="star_radio" value="1"/>
-                    <input type="radio" name="starpoint" id="starpoint_2" class="star_radio" value="1.5"/>
-                    <input type="radio" name="starpoint" id="starpoint_3" class="star_radio" value="2" />
-                    <input type="radio" name="starpoint" id="starpoint_4" class="star_radio" value="2.5" />
-                    <input type="radio" name="starpoint" id="starpoint_5" class="star_radio" value="3" />
-                    <input type="radio" name="starpoint" id="starpoint_6" class="star_radio" value="3.5" />
-                    <input type="radio" name="starpoint" id="starpoint_7" class="star_radio" value="4" />
-                    <input type="radio" name="starpoint" id="starpoint_8" class="star_radio" value="4" />
-                    <input type="radio" name="starpoint" id="starpoint_9" class="star_radio" value="4.5" />
-                    <input type="radio" name="starpoint" id="starpoint_10" class="star_radio" value="5" />
-                    <span class="starpoint_bg"></span>
-                </div>
-            </div>
-            <br />
-            <label>제목</label>
-            <input type="title" id="title" placeholder="제목" required /><br />
-            <label>후기</label><br />
-            <textarea id="content" placeholder="후기" required></textarea><br />
 
-            <button id="button" type="button" value="전송" onclick="submitForm()">
-                전송
-            </button>
-        </form>
-    </div>
 </div>
 </body>
 </html>

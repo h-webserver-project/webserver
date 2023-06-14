@@ -154,9 +154,11 @@
               ).then(
                       (json)=>{
                         console.log(json)
-                        if(json.status ===400){
+
+                        if(json===undefined){
                           window.location.href ="/"
                         }
+
                         if(json.data.role === "ROLE_USER"){
                           window.location.href ="/user"
                         }
@@ -224,7 +226,7 @@
 
                 movieItem.addEventListener("click", function() {
                   // Redirect to the moviedetail page with the movie ID
-                  window.location.href = "/moviedetail/?movie=" + movie.id;
+                  window.location.href = "/admindetail/?movie=" + movie.id;
                 });
 
 

@@ -173,6 +173,8 @@
 </div>
 
 <script>
+
+
     fetch("http://59.26.59.60:8081/api/admin/role", {
         method: "GET",
         headers: {
@@ -301,6 +303,9 @@
 
                                 if(data.status === 400){
                                     alert("잘못된 형식의 데이터 입니다.");
+                                }
+                                if(data.status === 403){
+                                    window.location.href = "/";
                                 }
 
                                 return response.json()})

@@ -140,8 +140,8 @@
                     ).then(
                         (json)=>{
                             console.log(json)
-                            console.log(json.status)
-                            if(json.status ===400){
+
+                            if(json ===undefined){
                                 window.location.href ="/"
                             }
                             if(json.data.role === "ROLE_USER"){

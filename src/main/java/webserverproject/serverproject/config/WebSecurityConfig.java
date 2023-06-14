@@ -56,6 +56,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers("/moviedetail/*").permitAll()
 				.antMatchers("/movieCreate").permitAll()
 				.antMatchers("/api/user/role").hasRole("USER")
+				.antMatchers("/api/movie/delete/*").hasRole("ADMIN")
 				.antMatchers("/api/admin/role").hasRole("ADMIN")
 				.antMatchers("/api/control/role").permitAll()
 				.antMatchers("/moviesearch/*").permitAll()
@@ -63,10 +64,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers("/admin/moviesearch/*").permitAll()
 				.antMatchers("/api/movie/search/*").permitAll()
 				.antMatchers("/api/review/create/*").hasRole("USER")
-				.antMatchers("/api/review/movie/all/*").hasRole("USER")
+				.antMatchers("/api/review/movie/all/*").permitAll()
 				.antMatchers("/api/review").hasRole("USER")
-				.antMatchers("/api/review/delete/*").permitAll()
+				.antMatchers("/api/review/delete/*").hasRole("USER")
 				.antMatchers("/myinfo").permitAll()
+				.antMatchers("/admindetail/*").permitAll()
 				.anyRequest().authenticated();
 		http.cors();
 		http.addFilterBefore(new JwtAuthorizationFilter(tokenProvider, userRepository), UsernamePasswordAuthenticationFilter.class);

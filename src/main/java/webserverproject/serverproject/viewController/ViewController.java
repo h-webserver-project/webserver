@@ -56,5 +56,10 @@ public class ViewController {
     public String myInfo(){
         return "myinfo";
     }
+
+    @GetMapping("/admindetail")
+    public String adminDetail(){
+        return "adminmoviedetail";
+    }
 }
 

@@ -130,6 +130,69 @@
 <div id="moviesContainer"></div>
 <script>
 
+    fetch("http://59.26.59.60:8081/api/admin/role", {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": localStorage.getItem("jwtToken")
+
+        }
+
+    }).then(
+        (response)=>{
+            if(response.status === 403){
+                console.log(403)
+                fetch("http://59.26.59.60:8081/api/control/role", {
+                    method: "GET",
+                    headers: {
+                        "Authorization": localStorage.getItem("jwtToken")
+                    }
+                }).then(
+                    (response)=>{
+                        console.log(response)
+                        response.json();
+                    }
+                ).then(
+                    (json)=>{
+                        console.log(json)
+
+                        if(json===undefined){
+                            window.location.href ="/"
+                        }
+
+                        if(json.data.role === "ROLE_USER"){
+                            window.location.href ="/user"
+                        }
+                        if(json.data.role === "ROLE_ADMIN"){
+                            window.location.href="/admin"
+                        }
+                        if(json.status === 500){
+                            window.location.href ="/"
+                        }
+                    }
+                );
+
+            }
+        }
+
+    ).then(
+        (response)=>{
+            console.log(response)
+            response.json();
+        }
+    ).then(
+        (json)=>{
+            console.log(json)
+            if(json.data.role === "ROLE_USER"){
+                window.location.href ="/user"
+            }
+            if(json.data.role === "ROLE_ADMIN"){
+                window.location.href="/admin"
+            }
+        }
+    )
+
+
 
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
@@ -168,6 +231,9 @@
                         }
                         if(json.data.role === "ROLE_ADMIN"){
                             window.location.href="/admin"
+                        }
+                        if(json.status === 403){
+                            window.location.href = "/";
                         }
                         if(json.status === 500){
                             window.location.href ="/"

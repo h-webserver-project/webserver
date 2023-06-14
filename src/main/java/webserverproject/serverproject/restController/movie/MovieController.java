@@ -3,6 +3,7 @@ package webserverproject.serverproject.restController.movie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+import webserverproject.serverproject.auth.PrincipalDetails;
 import webserverproject.serverproject.requestDTO.movieDTO.MovieCreateDTO;
 import webserverproject.serverproject.responseDTO.movieDTO.MovieCreateResponseDTO;
 import webserverproject.serverproject.responseDTO.movieDTO.MovieGetResponseDTO;
@@ -57,7 +58,10 @@ public class MovieController {
     // 영화 삭제
 
     @DeleteMapping("/api/movie/delete/{movieId}")
-    public ResponseEntity<?> deleteMovie(@PathVariable(value = "movieId") long movieId){
+    public ResponseEntity<?> deleteMovie(@PathVariable(value = "movieId") long movieId, Authentication authentication){
+
+        System.out.println(((PrincipalDetails)authentication.getPrincipal()).getUser().getRoles());
+        System.out.println("123");
         movieService.deleteMovie(movieId);
         return ResponseEntity.ok().body("영화 삭제가 완료되었습니다.");
     }

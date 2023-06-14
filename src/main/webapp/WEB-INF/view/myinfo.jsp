@@ -148,10 +148,19 @@
             height: 80%;
             overflow-y: scroll;
             scrollbar-width: none;
+            margin-top: 20px;
         }
 
         #review::-webkit-scrollbar {
             display: none;
+        }
+
+        #myreview{
+            margin-top: 100px;
+
+        }
+        #deleteBtn{
+            padding: 0;
         }
 
 
@@ -187,6 +196,9 @@
                             console.log(json)
                             console.log(json.status)
                             if(json.status ===400){
+                                window.location.href ="/"
+                            }
+                            if(json.status ===403){
                                 window.location.href ="/"
                             }
                             if(json.data.role === "ROLE_USER"){
@@ -232,30 +244,71 @@
                     }
                 })
                 .then(function(response) {
-                    console.log(response)
-                    //response.json();
-                    console.log(response.json())
+                    if (response.ok) {
+                        return response.json();
+                    }
+                    throw new Error('Network response was not ok.');
+
                 })
                 .then((data) =>  {
-                    console.log(data)
-                    //받은 데이터를 화면에 표시
-                    console.log(data.data.email);
-                    console.log(data.data.userName);
-                    console.log(data.data.phoneNumber);
-                    console.log(data.data.nickName);
-
-                    // document.getElementById('email').innerText = data.data.email;
-                    // document.getElementById('username').innerText = data.data.userName;
-                    // document.getElementById('phone').innerText = data.data.phoneNumber;
-                    // document.getElementById('nickname').innerText = data.data.nickName;
+                    document.getElementById('email').innerText = data.data.email;
+                    document.getElementById('username').innerText = data.data.userName;
+                    document.getElementById('phone').innerText = data.data.phoneNumber;
+                    document.getElementById('nickname').innerText = data.data.nickName;
                 })
                 .catch(function(error) {
                     console.log('Error:', error);
                 });
         }
         fetchInfo();
-
         function fetchReviews() {
+
+
+            fetch("http://59.26.59.60:8081/api/user/role", {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": localStorage.getItem("jwtToken")
+
+                }
+
+            }).then(
+                (response)=>{
+                    if(response.status === 403){
+                        console.log(403)
+                        fetch("http://59.26.59.60:8081/api/control/role", {
+                            method: "GET",
+                            headers: {
+                                "Authorization": localStorage.getItem("jwtToken")
+                            }
+                        }).then(
+                            (response)=>{
+                                console.log(response)
+                                response.json();
+                            }
+                        ).then(
+                            (json)=>{
+                                console.log(json)
+
+                                if(json ===undefined){
+                                    window.location.href ="/"
+                                }
+                                if(json.data.role === "ROLE_USER"){
+                                    window.location.href ="/user"
+                                }
+                                if(json.data.role === "ROLE_ADMIN"){
+                                    window.location.href="/admin"
+                                }
+                                if(json.status === 500){
+                                    window.location.href ="/"
+                                }
+                            }
+                        );
+
+                    }
+                }
+
+            )
             fetch("http://59.26.59.60:8081/api/reviews", {
                 method: "GET",
                 headers: {
@@ -275,14 +328,23 @@
                         const content = review.content;
                         const grade = review.grade;
                         const id = review.id;
+                        console.log(grade);
+
+                        const movieId = review.movieId;
+                        const movieTile = review.movieTitle;
 
                         const reviewItem = document.createElement("div");
 
                         reviewItem.className = "review-item";
 
+                        reviewItem.addEventListener("click", function() {
+                            window.location.href = "/moviedetail/?movie=" + movieId;
+                        });
+                        reviewItem.style.cursor = "pointer";
+
                         // reviewItem.innerHTML = "<div>"+grade+"점"+"</div>"+"<h3>" +"제목 : " + title + "</h3>"  + "<p>" + content + "</p>"+"<br>"
                         //     +"<span id="deleteBtn">"+"제거"+"</span>";
-                        reviewItem.innerHTML = "<div>" + grade + "점</div>" + "<h3>제목 : " + title + "</h3>" + "<p>" + content + "</p>" + "<br>" +   "<button id='deleteBtn'>" + "제거" + "</button>";
+                        reviewItem.innerHTML = "<h2> 영화명: " + movieTile + "</h2>" + "<h3>Title : " + title + "</h3>" + "<p> content: " + content + "</p>"  +"<p> 점수 "+grade +"점</p>" +  "<button id='deleteBtn'>" + "<br>" +"<button>"+ "제거" + "</button>";
 
                         // Get reference to the delete button span
                         const deleteBtn = reviewItem.querySelector("#deleteBtn");
@@ -296,7 +358,7 @@
                     });
                 })
                 .catch((error) => {
-                    console.error("Error fetching reviewes:", error);
+                    window.location.href = "/";
                 });
         }
         fetchReviews();
@@ -342,6 +404,9 @@
         </div>
     </div>
     <div id="reviewall">
+        <div id =myreview>
+            <h2>내가 올린 리뷰</h2>
+        </div>
         <div id="review">
 
 
