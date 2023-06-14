@@ -151,6 +151,9 @@
             border-radius: 4px;
             cursor: pointer;
         }
+        #registerBtn:hover {
+            background-color: #bbb;
+        }
 
         #viewBtn {
             display: inline-block;
@@ -201,6 +204,42 @@
             font-family: inherit;
             /* font-size: inherit; */
         }
+        .review-item {
+            background-color: #f5f5f5;
+            padding: 12px;
+            margin: 5px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .review-item div {
+            font-size: 20px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 0.5rem;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        .review-item h3 {
+            font-size: 24px;
+            font-weight: bold;
+            margin: 0;
+            font-family: 'Roboto', sans-serif;
+            letter-spacing: 0.5px;
+        }
+
+        .review-item p {
+            font-size: 16px;
+            font-weight: normal;
+            color: #555;
+            white-space: pre-wrap;
+            line-height: 1.5;
+            margin-top: 0;
+            font-family: 'Roboto', sans-serif;
+            letter-spacing: 0.3px;
+            text-indent: 1rem;
+        }
+
     </style>
     <script>
 
@@ -264,14 +303,84 @@
                     console.error('Error:', error);
                 });
             // location.reload(); // 성공적으로 응답이 오면 페이지 새로고침
-        }
 
-        function reviewList() {
 
-        }
-        function reviewAdd(){
 
         }
+
+        function showReviewList() {
+            const reviewServer = document.querySelector('#reviewServe');
+            const reviewList = document.querySelector('#ShowReviewList');
+
+            reviewServer.style.display = 'none';
+            reviewList.style.display = 'block';
+
+            // change the style of the button
+            const viewBtn = document.querySelector('#viewBtn');
+            viewBtn.style.backgroundColor = '#2196f3';
+            viewBtn.style.color = 'white';
+            viewBtn.style.cursor = 'default';
+
+            // change the style of the register button
+            const registerBtn = document.querySelector('#registerBtn');
+            registerBtn.style.backgroundColor = '#ddd';
+            registerBtn.style.color = '#333';
+            registerBtn.style.cursor = 'pointer';
+        }
+        function showReviewAdd(){
+            const reviewServer = document.querySelector('#reviewServe');
+            const reviewList = document.querySelector('#ShowReviewList');
+            reviewServer.style.display = 'block';
+            reviewList.style.display = 'none';
+            // change the style of the view button
+            const viewBtn = document.querySelector('#viewBtn');
+            viewBtn.style.backgroundColor = '#ddd';
+            viewBtn.style.color = '#333';
+            viewBtn.style.cursor = 'pointer';
+
+            // change the style of the register button
+            const registerBtn = document.querySelector('#registerBtn');
+            registerBtn.style.backgroundColor = '#2196f3';
+            registerBtn.style.color = 'white';
+            registerBtn.style.cursor = 'default';
+        }
+
+        function fetchReviews() {
+            const movieId = getMovieIdFromUrl(); // getMovieIdFromUrl() 함수를 사용하여 movieId 값을 가져옵니다.
+            const getReviews = "http://localhost:8081/api/review/movie/all/"+movieId;
+            fetch(getReviews, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": localStorage.getItem("jwtToken")
+                }
+            })
+                .then((response) => response.json())
+                .then((data) => {
+                    console.log(data)
+                    const reviewsContainer = document.getElementById("ShowReviewList");
+
+                    reviewsContainer.innerHTML = "";
+
+                    data.data.forEach((review) => {
+                        const title = review.title;
+                        const content = review.content;
+                        const grade = review.grade;
+
+                        const reviewItem = document.createElement("div");
+
+                        reviewItem.className = "review-item";
+
+                        reviewItem.innerHTML = "<div>"+grade+"점"+"</div>"+"<h3>" +"제목 : " + title + "</h3>" + "<br>" + "<p>" + content + "</p>";
+
+                        reviewsContainer.appendChild(reviewItem);
+                    });
+                })
+                .catch((error) => {
+                    console.error("Error fetching reviewes:", error);
+                });
+        }
+        fetchReviews();
 
     </script>
 </head>
@@ -292,8 +401,12 @@
 <div id="reviewMain">
     <h3>Review</h3>
     <div>
-        <span id="registerBtn" onclick="reviewAdd()">등록</span>
-        <span id="viewBtn" onclick="reviewList()">보기</span>
+        <span id="registerBtn" onclick="showReviewAdd()">등록</span>
+        <span id="viewBtn" onclick="showReviewList()">보기</span>
+    </div>
+
+    <div id="ShowReviewList">
+
     </div>
 
     <div id="reviewServe">
